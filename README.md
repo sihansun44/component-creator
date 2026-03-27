@@ -1,14 +1,14 @@
-# Momentum Design System — Cursor Skills
+# Component Creator — Cursor Skill
 
-A collection of [Cursor AI](https://cursor.com) skills for building components with the **Momentum Design System** (Webex AI Agent Studio).
+A generic [Cursor AI](https://cursor.com) skill for building design-system-driven components from scratch. Works with **any design library, any token set, any framework** — not tied to a specific system.
 
-These skills teach Cursor how to generate components that follow your design system's tokens, CSS classes, and conventions — so every component it builds is automatically consistent.
+This skill teaches Cursor a three-phase workflow: collect design tokens, build a reusable component CSS library, and generate new components that stay consistent with your established foundation.
 
 ## Available Skills
 
 | Skill | Description |
 |-------|-------------|
-| [component-creator](./component-creator/SKILL.md) | Generates React components using Momentum Design tokens, CSS component classes, and accessibility best practices. |
+| [component-creator](./component-creator/SKILL.md) | Builds `tokens.css` from designer input, creates reusable `components.css` classes, and generates new components that strictly reference the token system. |
 
 ## Installation
 
@@ -32,31 +32,38 @@ git clone https://github.com/sihansun44/component-creator.git .cursor/skills
 ### Option 3: Install globally (all Cursor projects)
 
 ```bash
-git clone https://github.com/sihansun44/component-creator.git ~/.cursor/skills/momentum
+git clone https://github.com/sihansun44/component-creator.git ~/.cursor/skills/component-creator
 ```
-
-## Prerequisites
-
-These skills assume your project has the Momentum Design System CSS files:
-
-| File | Purpose |
-|------|---------|
-| `src/tokens/*.css` | Raw design tokens (colors, spacing, fonts, radii, effects) |
-| `src/tokens.css` | Semantic aliases (`--text-primary`, `--accent-color`, etc.) |
-| `src/components.css` | Component CSS classes (`.btn`, `.card`, `.tabs`, `.modal`, etc.) |
-| `src/index.css` | Import chain that loads everything in order |
-
-See the [Momentum Testing](https://github.com/webexdesign/Momentum-Testing) repo for a complete reference implementation.
 
 ## How It Works
 
-Once installed, Cursor automatically detects the skill. When you ask it to build a component, it will:
+The skill follows three phases:
 
-1. **Read your tokens and CSS** to find exact class names and variables
-2. **Map every visual decision** to existing tokens (no hardcoded colors or spacing)
-3. **Reuse shared components** (Button, Card, Badge, etc.) instead of reinventing
-4. **Follow accessibility best practices** (semantic HTML, aria labels, focus states)
-5. **Self-check** against a constraint checklist before outputting
+### Phase 1 — Token Foundation
+Cursor asks the designer to paste or describe their tokens (colors, typography, spacing, radius, shadows). It generates a clean `tokens.css` with only CSS custom properties — the single source of truth.
+
+### Phase 2 — Component Library
+Cursor creates `components.css` with reusable CSS classes (buttons, cards, badges, forms, etc.) that strictly reference tokens. No hardcoded values.
+
+### Phase 3 — Component Generation
+When building new UI, Cursor reads the token and component files, maps every visual decision to an existing token or class, and outputs consistent code. Any new reusable patterns get added back to `components.css`.
+
+## File Structure
+
+Once set up, your project will have:
+
+| File | Contains | Rules |
+|------|----------|-------|
+| `tokens.css` | CSS custom properties only | No classes. No component styles. Values only. |
+| `components.css` | Reusable CSS component classes | Every value must reference a token. No raw values. |
+| Components | Application-specific UI code | Uses classes from `components.css` + tokens from `tokens.css`. |
+
+## What Makes This Different
+
+- **Framework agnostic** — works with React, Vue, Svelte, plain HTML, or anything else
+- **Library agnostic** — not tied to any specific design system; bring your own tokens
+- **Designer-friendly** — starts from what the designer already has (Figma exports, brand docs, or verbal descriptions)
+- **Self-enforcing** — includes a constraint checklist that prevents hardcoded values from slipping through
 
 ## License
 
